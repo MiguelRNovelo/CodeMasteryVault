@@ -1,0 +1,329 @@
+-- DROP DATABASE dvdrental;
+-- CREATE DATABASE IF NOT EXISTS dvdrental;
+USE dvdrental;
+-- Creating a Data Base & Table 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\'
+
+DROP TABLE IF EXISTS `Actor`;
+CREATE TABLE IF NOT EXISTS `Actor`(
+ 	`actor_id` 		INTEGER,
+  	`first_name` 	VARCHAR(80),
+  	`last_name` 	VARCHAR(80),
+    `last_update`	TEXT,
+    	PRIMARY KEY (actor_id)
+    );
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\actor.csv'
+INTO TABLE `Actor` 
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES;
+
+DROP TABLE IF EXISTS `film`;
+CREATE TABLE IF NOT EXISTS `film` (
+    `film_id` INTEGER,
+    `title` VARCHAR(255),
+    `description` TEXT,
+    `release_year` INTEGER,
+    `language_id` INTEGER,
+    `original_language_id` TEXT,
+    `rental_duration` INTEGER,
+    `rental_rate` DECIMAL(4, 2), 
+    `length`	INTEGER,
+    `replacement_cost` DECIMAL(5,2),
+    `rating` VARCHAR(80),
+    `last_update` TEXT,
+    `special_features` TEXT,
+    `fulltext` TEXT,
+    PRIMARY KEY (film_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\film.csv'
+INTO TABLE `film` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `staff`;
+CREATE TABLE IF NOT EXISTS `staff` (
+    `staff_id` INTEGER,
+    `first_name` VARCHAR(255),
+    `last_name` VARCHAR(255),
+    `address_id` INTEGER,
+    `email` TEXT,
+    `store_id` INTEGER,
+    `active` VARCHAR(80), 
+    `username`	VARCHAR(80),
+    `password` VARCHAR(80),
+    `last_update` TEXT,
+    `picture` TEXT,
+    PRIMARY KEY (staff_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\staff.csv'
+INTO TABLE `staff` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `adress`;
+CREATE TABLE IF NOT EXISTS `adress` (
+    `address_id` INTEGER,
+    `address` VARCHAR(255),
+    `address2` VARCHAR(255),
+    `district` VARCHAR(255),
+    `city_id` INTEGER,
+    `postal_code` VARCHAR(20),
+    `phone` VARCHAR(15),
+    `last_update` TEXT,
+    PRIMARY KEY (address_id)
+);
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\address.csv'
+INTO TABLE `adress` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `inventory`;
+CREATE TABLE IF NOT EXISTS `inventory` (
+    `inventory_id` INTEGER,
+    `film_id` INTEGER,
+    `store_id` INTEGER,
+    `last_update` TEXT,
+    PRIMARY KEY (inventory_id)
+);
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\inventory.csv'
+INTO TABLE `inventory` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `payment`;
+CREATE TABLE IF NOT EXISTS `payment` (
+    `payment_id` INTEGER,
+    `customer_id` INTEGER,
+    `staff_id` INTEGER,
+	`rental_id` INTEGER,
+	`amount` DECIMAL(4, 2), 
+    `payment_date` TEXT,
+    PRIMARY KEY (payment_id)
+);
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\payment.csv'
+INTO TABLE `payment` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `film_category`;
+CREATE TABLE IF NOT EXISTS `film_category` (
+    `film_id` INTEGER,
+    `category_id` INTEGER,
+    `last_update` TEXT,
+    PRIMARY KEY (film_id)
+);
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\film_category.csv'
+INTO TABLE `film_category` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `customer`;
+CREATE TABLE IF NOT EXISTS `customer` (
+    `customer_id` INTEGER,
+    `store_id` INTEGER,
+    `first_name` VARCHAR(255),
+	`last_name` VARCHAR(255),
+    `email` TEXT,
+    `adress_id` INTEGER,
+    `activebool` VARCHAR(255),
+     `create_date` TEXT,
+     `last_update` TEXT,
+	 `active` INTEGER,
+    PRIMARY KEY (customer_id)
+);
+    
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\customer.csv'
+INTO TABLE `customer` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `city`;
+CREATE TABLE IF NOT EXISTS `city` (
+    `city_id` INTEGER,
+    `city` VARCHAR(100),
+	`country_id` INTEGER,
+	`last_update` TEXT
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\city.csv'
+INTO TABLE `city` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `city`;
+CREATE TABLE IF NOT EXISTS `city` (
+    `city_id` INTEGER,
+    `city` VARCHAR(100),
+	`country_id` INTEGER,
+	`last_update` TEXT
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\city.csv'
+INTO TABLE `city` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `rental`;
+CREATE TABLE IF NOT EXISTS `rental` (
+    `rental_id` INTEGER,
+    `rental_date` TEXT,
+	`inventory_id` INTEGER,
+	`customer_id` INTEGER, 
+    `return_date` TEXT,
+    `staff_id` INTEGER, 
+    `last_update` TEXT,
+    PRIMARY KEY(rental_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\rental.csv'
+INTO TABLE `rental` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `country`;
+CREATE TABLE IF NOT EXISTS `country` (
+    `country_id` INTEGER,
+    `country` VARCHAR (100),
+    `last_update` TEXT
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\country.csv'
+INTO TABLE `country` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `store`;
+CREATE TABLE IF NOT EXISTS `store` (
+    `store_id` INTEGER,
+    `manager_staff_id` INTEGER,
+    `address_id` INTEGER,
+	`last_update` TEXT
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\store.csv'
+INTO TABLE `store` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE IF NOT EXISTS `category` (
+    `category_id` INTEGER,
+    `name` VARCHAR(100),
+    `last_update` TEXT,
+    PRIMARY KEY(category_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\category.csv'
+INTO TABLE `category` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `film_category`;
+CREATE TABLE IF NOT EXISTS `film_category` (
+    `film_id` INTEGER,
+    `category_id` INTEGER,
+    `last_update` TEXT, 
+    PRIMARY KEY(film_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\film_category.csv'
+INTO TABLE `film_category` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `film_actor`;
+CREATE TABLE IF NOT EXISTS `film_actor` (
+    `actor_id` INTEGER,
+    `film_id` INTEGER,
+    `last_update` TEXT,
+    PRIMARY KEY(actor_id)
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\film_actor.csv'
+INTO TABLE `film_actor` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+DROP TABLE IF EXISTS `language`;
+CREATE TABLE IF NOT EXISTS `language` (
+    `language_id` INTEGER,
+    `name` VARCHAR(100),
+    `last_update` TEXT
+);
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\language.csv'
+INTO TABLE `language` 
+FIELDS TERMINATED BY ','  -- Cambia ',' si el separador de columnas es diferente
+ENCLOSED BY '"'  -- Cambia '"' si se utilizan comillas diferentes para delimitar el texto
+ESCAPED BY '\\'  -- Puede ser necesario si hay caracteres de escape en el texto
+LINES TERMINATED BY '\r\n'  -- Cambia '\r\n' si el archivo CSV utiliza otro carácter de nueva línea
+IGNORE 1 LINES;  -- Ignora la primera fila si contiene encabezados;
+
+SELECT * FROM Actor;
+SELECT *  FROM film;
+SELECT * FROM staff;
+SELECT * FROM adress;
+SELECT * FROM inventory;
+SELECT * FROM payment;
+SELECT * FROM film_category;
+SELECT * FROM customer;
+SELECT * FROM city;
+SELECT * FROM rental;
+SELECT * FROM country;
+SELECT * FROM store;
+SELECT * FROM category;
+SELECT * FROM film_category;
+SELECT * FROM film_actor;
+SELECT * FROM language;
