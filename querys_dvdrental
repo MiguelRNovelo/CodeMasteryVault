@@ -1,0 +1,127 @@
+-- Lets see the number of films in each category, sorted by descending order
+USE dvdrental;
+SELECT
+    category.category_id,
+    category.name AS category_name,
+   COUNT(DISTINCT film_category.film_id) AS films_in_category
+FROM
+    category
+LEFT JOIN film_category ON
+    category.category_id = film_category.category_id
+GROUP BY
+    category.category_id, category.name
+ORDER BY
+    films_in_category DESC;
+
+-- Now lets see the top20 actors whose films rented the most
+SELECT * from rental;
+
+SELECT actor.actor_id,
+actor.first_name,
+actor.last_name, 
+count(rental_id) as RentedTimes
+From
+actor
+LEFT JOIN film_actor ON
+	actor.actor_id=film_actor.actor_id
+LEFT JOIN film ON
+	film_actor.film_id=film.film_id
+LEFT JOIN inventory ON
+	film.film_id=inventory.film_id
+LEFT JOIN rental ON
+	inventory.inventory_id=rental.inventory_id
+
+GROUP BY
+	actor.actor_id,actor.actor_id, actor.first_name, actor.last_name
+ORDER BY 
+	RentedTimes DESC
+Limit 20;
+
+-- Display the category of films on which they spent the most money
+SELECT * FROM category;
+SELECT * FROM payment;
+SELECT* FROM film_category;
+SELECT * FROM film;
+SELECT * FROM inventory;
+SELECT * FROM rental;
+SELECT category.name,
+SUM(payment.amount) as TotalSpent
+FROM
+category
+INNER JOIN film_category ON
+category.category_ID = film_category.category_id
+INNER JOIN film ON
+film_category.film_id=film.film_id
+INNER JOIN inventory ON
+film.film_id= inventory.film_id
+INNER JOIN rental ON
+inventory.inventory_id= rental.inventory_id
+INNER JOIN payment ON
+rental.rental_id = payment.rental_id
+GROUP BY category.name
+ORDER BY TotalSpent DESC
+LIMIT 20;
+-- Display de category films on which they spent more money
+WITH category_payments AS (
+    SELECT
+        category.name,
+        payment.amount
+    FROM
+        category
+        INNER JOIN film_category ON category.category_id = film_category.category_id
+        INNER JOIN film ON film_category.film_id = film.film_id
+        INNER JOIN inventory ON film.film_id = inventory.film_id
+        INNER JOIN rental ON inventory.inventory_id = rental.inventory_id
+        INNER JOIN payment ON rental.rental_id = payment.rental_id
+)
+SELECT
+    name AS category_name,
+    SUM(amount) AS TotalSpent
+FROM category_payments
+GROUP BY name
+ORDER BY TotalSpent DESC
+LIMIT 10;
+-- Example 3
+WITH category_payments AS (
+    SELECT
+        c.category_id,
+        c.name AS category_name,
+        (SELECT SUM(p.amount)
+         FROM film_category AS fc
+         JOIN inventory AS i ON fc.film_id = i.film_id
+         JOIN rental AS r ON i.inventory_id = r.inventory_id
+         JOIN payment AS p ON r.rental_id = p.rental_id
+         WHERE fc.category_id = c.category_id) AS TotalSpent
+    FROM category AS c
+)
+SELECT
+    category_name,
+    TotalSpent
+FROM category_payments
+ORDER BY TotalSpent DESC
+LIMIT 10;
+-- EXAMPLE 4
+SELECT
+    category.name AS category_name,
+    SUM(payment.amount) AS TotalSpent
+FROM category
+INNER JOIN film_category ON category.category_id = film_category.category_id
+INNER JOIN film ON film_category.film_id = film.film_id
+INNER JOIN inventory ON film.film_id = inventory.film_id
+INNER JOIN rental ON inventory.inventory_id = rental.inventory_id
+INNER JOIN payment ON rental.rental_id = payment.rental_id
+GROUP BY category.name
+ORDER BY TotalSpent DESC
+LIMIT 20;
+-- Lets print titles from movies that are not in inventory
+SELECT
+    film.title
+FROM
+    film
+    LEFT JOIN inventory ON
+        film.film_id = inventory.film_id
+WHERE
+    inventory.film_id IS NULL
+ORDER BY
+    film.title ASC;
+
